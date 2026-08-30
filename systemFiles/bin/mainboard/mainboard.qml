@@ -1,21 +1,25 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-ApplicationWindow{
+function appClicked(appId) {
+    console.log("clicked:  " + appId)
+}
+
+ApplicationWindow {
     id: mainWindow
     width: 480
     height: 800
     visible: true
     title: "MainBoard"
 
-    Image{
+    Image {
         id: wallpaper
         anchors.fill: parent
         source: "activeWallpaper.png"
         fillMode: Image.PreserveAspectCrop
     }
 
-    Rectangle{
+    Rectangle {
         id: topBar
         width: parent.width
         height: 30
@@ -23,7 +27,7 @@ ApplicationWindow{
         color: '#05d3e2ff'
         z: 9999
 
-        Text{
+        Text {
             id: topBarClock
             anchors.left: parent.left
             anchors.leftMargin: 10
@@ -33,7 +37,7 @@ ApplicationWindow{
             font.bold: true
             text: Qt.formatTime(new Date(), "hh:mm")
 
-            Timer{
+            Timer {
                 interval: 1000
                 running: true
                 repeat: true
@@ -41,7 +45,7 @@ ApplicationWindow{
             }
         }
 
-        Text{
+        Text {
             id: betaIndicator
             color: "red"
             font.pixelSize: 14
@@ -50,22 +54,21 @@ ApplicationWindow{
             anchors.centerIn: parent
         }
 
-        Row{
+        Row {
             id: topBarStatus
             anchors.right: parent.right
             anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             spacing: 8
 
-
-            Image{
+            Image {
                 id: bluetoothIcon
                 source: mainboardManager.bluetoothInactiveIcon
                 height: 16
                 fillMode: Image.PreserveAspectFit
             }
 
-            Image{
+            Image {
                 id: wifiIcon
                 source: mainboardManager.wifi3Icon
                 height: 14
@@ -74,7 +77,112 @@ ApplicationWindow{
         }
     }
 
-    Rectangle{
+    Item {
+        id: gridContainer
+        anchors.top: topBar.bottom
+        anchors.bottom: searchButton.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 10
+        anchors.topMargin: 15
+
+        readonly property real cellWidth: width / 4
+        readonly property real cellHeight: height / 4
+
+        Repeater {
+            model: mainboardManager.gridItems
+
+            delegate: Item {
+                x: modelData.col * gridContainer.cellWidth
+                y: modelData.row * gridContainer.cellHeight
+                width: modelData.spanX * gridContainer.cellWidth
+                height: modelData.spanY * gridContainer.cellHeight
+
+                Item {
+                    anchors.fill: parent
+                    visible: modelData.type === "app"
+
+                    Column {
+                        anchors.centerIn: parent
+                        spacing: 4
+
+                        Image {
+                            width: 95
+                            height: 95
+                            source: modelData.icon
+                            fillMode: Image.PreserveAspectFit
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: appClicked(modelData.id)
+                            }
+                        }
+
+                        Text {
+                            text: modelData.name
+                            color: "white"
+                            font.pixelSize: 12
+                            font.bold: true
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            elide: Text.ElideRight
+                            width: gridContainer.cellWidth - 8
+                            horizontalAlignment: Text.AlignHCenter
+                        }
+                    }
+                }
+
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.margins: 6
+                    visible: modelData.type === "widget"
+                    color: "#40d3e2ff"
+                    radius: 23.75
+
+                    Column {
+                        anchors.centerIn: parent
+                        visible: modelData.id === "clock_widget"
+
+                        Text {
+                            text: Qt.formatTime(new Date(), "hh:mm")
+                            color: "white"
+                            font.pixelSize: 36
+                            font.bold: true
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        Text {
+                            text: modelData.name
+                            color: "#dddddd"
+                            font.pixelSize: 13
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        id: searchButton
+        width: 90
+        height: 28
+        anchors.bottom: dock.top
+        anchors.bottomMargin: 12
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: '#40d3e2ff'
+        radius: 14
+
+        Text {
+            id: searchButtonText
+            anchors.centerIn: parent
+            color: "white"
+            font.pixelSize: 14
+            font.bold: true
+            text: "Szukaj"
+        }
+    }
+
+    Rectangle {
         id: dock
         width: parent.width - 20
         height: 125
@@ -85,62 +193,27 @@ ApplicationWindow{
         radius: 31.25
         z: 9985
 
-        Row{
+        Row {
             id: dockRow
             anchors.centerIn: parent
             spacing: 15
 
-            Rectangle{
-                id: app1
-                width: 95
-                height: 95
-                color: '#00ff2f'
-                radius: 23.75
+            Repeater {
+                model: mainboardManager.dockItems
+
+                delegate: Image {
+                    width: 95
+                    height: 95
+                    source: modelData.icon
+                    fillMode: Image.PreserveAspectFit
+                    
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: appClicked(modelData.id)
+                    }
+                }
             }
-
-            Rectangle{
-                id: app2
-                width: 95
-                height: 95
-                color: '#fbff00'
-                radius: 23.75
-            }
-
-            Rectangle{
-                id: app3
-                width: 95
-                height: 95
-                color: '#00d9ff'
-                radius: 23.75
-            }
-
-            Rectangle{
-                id: app4
-                width: 95
-                height: 95
-                color: '#ff0000'
-                radius: 23.75
-            }
-        }
-    }
-
-    Rectangle{
-        id: searchButton
-        width: 90
-        height: 28
-        anchors.bottom: dock.top
-        anchors.bottomMargin: 12
-        anchors.horizontalCenter: parent.horizontalCenter
-        color: '#40d3e2ff'
-        radius: 14
-
-        Text{
-            id: searchButtonText
-            anchors.centerIn: parent
-            color: "white"
-            font.pixelSize: 14
-            font.bold: true
-            text: "Szukaj"
         }
     }
 }

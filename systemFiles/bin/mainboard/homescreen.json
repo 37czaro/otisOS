@@ -1,0 +1,45 @@
+{
+  "grid": [
+    {
+      "type": "app",
+      "id": "com.otis.messages.app",
+      "name": "Wiadomości",
+      "icon": "users/user/apps/com.otis.messages.app/appicon/1x/default.png",
+      "row": 0,
+      "col": 0,
+      "spanX": 1,
+      "spanY": 1
+    },
+    {
+      "type": "app",
+      "id": "com.otis.settings.app",
+      "name": "Ustawienia",
+      "icon": "users/user/apps/com.otis.settings.app/appicon/1x/default.png",
+      "row": 0,
+      "col": 1,
+      "spanX": 1,
+      "spanY": 1
+    },
+    {
+      "type": "widget",
+      "id": "clock_widget",
+      "name": "Zegar",
+      "row": 1,
+      "col": 0,
+      "spanX": 2,
+      "spanY": 2
+    }
+  ],
+  "dock": [
+    {
+      "id": "com.otis.appstore.app",
+      "name": "AppStore",
+      "icon": "users/user/apps/com.otis.appstore.app/appicon/1x/default.png"
+    },
+    {
+      "id": "com.otis.devtools.app",
+      "name": "DevTools",
+      "icon": "users/user/apps/com.otis.devtools.app/appicon/1x/default.png"
+    }
+  ]
+}

@@ -1,5 +1,4 @@
 import sys
-import subprocess
 import os
 import json
 from PyQt6.QtGui import QGuiApplication
@@ -8,75 +7,69 @@ from PyQt6.QtCore import QUrl, QObject, pyqtProperty
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "..", ".."))
-SYSTEM_ICONS_DIR = os.path.join(ROOT_DIR, "SystemFiles", "icons")
-WALLPAPERS_DIR = os.path.join(ROOT_DIR, "users", "user", "wallpapers")
+SYSTEM_ICONS_DIR = os.path.join(ROOT_DIR, "systemFiles", "icons")
+HOMESCREEN_JSON = os.path.join(BASE_DIR, "homescreen.json")
 
 class mainboardManager(QObject):
     def __init__(self):
         super().__init__()
         self._search_icon = os.path.join(SYSTEM_ICONS_DIR, "search.svg")
         self._wifi3_icon = os.path.join(SYSTEM_ICONS_DIR, "wifi_3.svg")
-        self._wifi2_icon = os.path.join(SYSTEM_ICONS_DIR, "wifi_2.svg")
-        self._wifi1_icon = os.path.join(SYSTEM_ICONS_DIR, "wifi_1.svg")
-        self._wifi0_icon = os.path.join(SYSTEM_ICONS_DIR, "wifi_0.svg")
-        self._battery_full_icon = os.path.join(SYSTEM_ICONS_DIR, "battery_full.svg")
-        self._battery_half_icon = os.path.join(SYSTEM_ICONS_DIR, "battery_half.svg")
-        self._battery_low_icon = os.path.join(SYSTEM_ICONS_DIR, "battery_low.svg")
-        self._battery_charging_icon = os.path.join(SYSTEM_ICONS_DIR, "battery_charging.svg")
-        self._bluetooth_active_icon = os.path.join(SYSTEM_ICONS_DIR, "bluetooth_active.svg")
         self._bluetooth_inactive_icon = os.path.join(SYSTEM_ICONS_DIR, "bluetooth_inactive.svg")
 
-    @pyqtProperty(str)
-    def searchIcon(self):
-        return self._search_icon
+    def _format_items(self, raw_list):
+        items = []
+        for item in raw_list:
+            icon_url = ""
+            if "icon" in item:
+                abs_icon_path = os.path.join(ROOT_DIR, item["icon"])
+                icon_url = QUrl.fromLocalFile(abs_icon_path).toString()
+            
+            items.append({
+                "type": item.get("type", "app"),
+                "id": item.get("id", ""),
+                "name": item.get("name", ""),
+                "icon": icon_url,
+                "row": item.get("row", 0),
+                "col": item.get("col", 0),
+                "spanX": item.get("spanX", 1),
+                "spanY": item.get("spanY", 1)
+            })
+        return items
+
+    @pyqtProperty(list)
+    def gridItems(self):
+        if os.path.exists(HOMESCREEN_JSON):
+            try:
+                with open(HOMESCREEN_JSON, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    return self._format_items(data.get("grid", []))
+            except Exception as e:
+                print(f"Błąd czytania grid: {e}")
+        return []
+
+    @pyqtProperty(list)
+    def dockItems(self):
+        if os.path.exists(HOMESCREEN_JSON):
+            try:
+                with open(HOMESCREEN_JSON, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    return self._format_items(data.get("dock", []))
+            except Exception as e:
+                print(f"Błąd czytania dock: {e}")
+        return []
 
     @pyqtProperty(str)
-    def wifi3Icon(self):
-        return self._wifi3_icon
-
+    def searchIcon(self): return self._search_icon
     @pyqtProperty(str)
-    def wifi2Icon(self):
-        return self._wifi2_icon
-
+    def wifi3Icon(self): return self._wifi3_icon
     @pyqtProperty(str)
-    def wifi1Icon(self):
-        return self._wifi1_icon
-
-    @pyqtProperty(str)
-    def wifi0Icon(self):
-        return self._wifi0_icon
-
-    @pyqtProperty(str)
-    def batteryFullIcon(self):
-        return self._battery_full_icon
-
-    @pyqtProperty(str)
-    def batteryHalfIcon(self):
-        return self._battery_half_icon
-
-    @pyqtProperty(str)
-    def batteryLowIcon(self):
-        return self._battery_low_icon
-
-    @pyqtProperty(str)
-    def batteryChargingIcon(self):
-        return self._battery_charging_icon
-
-    @pyqtProperty(str)
-    def bluetoothActiveIcon(self):
-        return self._bluetooth_active_icon
-
-    @pyqtProperty(str)
-    def bluetoothInactiveIcon(self):
-        return self._bluetooth_inactive_icon
+    def bluetoothInactiveIcon(self): return self._bluetooth_inactive_icon
 
 
 app = QGuiApplication(sys.argv)
 engine = QQmlApplicationEngine()
-
 manager = mainboardManager()
 engine.rootContext().setContextProperty("mainboardManager", manager)
-
 engine.load(QUrl.fromLocalFile(os.path.join(BASE_DIR, "mainboard.qml")))
-
 sys.exit(app.exec())
