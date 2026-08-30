@@ -57,6 +57,14 @@ ApplicationWindow{
             anchors.verticalCenter: parent.verticalCenter
             spacing: 8
 
+
+            Image{
+                id: bluetoothIcon
+                source: mainboardManager.bluetooth_inactiveIcon
+                height: 14
+                fillMode: Image.PreserveAspectFit
+            }
+            
             Image{
                 id: wifiIcon
                 source: mainboardManager.wifi3Icon
