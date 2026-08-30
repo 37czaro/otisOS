@@ -20,7 +20,7 @@ ApplicationWindow{
         width: parent.width
         height: 30
         anchors.top: parent.top
-        color: '#00ff2f'
+        color: '#05d3e2ff'
         z: 9999
 
         Text{
@@ -56,6 +56,13 @@ ApplicationWindow{
             anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             spacing: 8
+
+            Image{
+                id: wifiIcon
+                source: mainboardManager.wifi3Icon
+                height: 14
+                fillMode: Image.PreserveAspectFit
+            }
         }
     }
 
