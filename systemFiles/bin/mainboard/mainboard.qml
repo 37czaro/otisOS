@@ -24,7 +24,7 @@ ApplicationWindow {
         width: parent.width
         height: 30
         anchors.top: parent.top
-        color: '#05d3e2ff'
+        color: "transparent"
         z: 9999
 
         Text {

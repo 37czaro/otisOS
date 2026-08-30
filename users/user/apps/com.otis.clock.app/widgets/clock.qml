@@ -1,8 +1,12 @@
 import QtQuick 2.15
 
 Rectangle {
-    color: "#40d3e2ff"
+    id: widgetRoot
+    color: '#1c2431' 
     radius: 23.75
+
+    border.color: '#2b3f4e'
+    border.width: 1
 
     Column {
         anchors.centerIn: parent
@@ -25,7 +29,7 @@ Rectangle {
 
         Text {
             text: Qt.formatDate(new Date(), "dddd, d MMMM")
-            color: "#dddddd"
+            color: "#eeeeee"
             font.pixelSize: 12
             anchors.horizontalCenter: parent.horizontalCenter
         }
