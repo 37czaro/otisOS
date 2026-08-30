@@ -9,7 +9,7 @@ ApplicationWindow {
     title: "MainBoard"
 
     function appClicked(appId) {
-        console.log("clicked:  " + appId)
+        console.log("clicked: " + appId)
     }
 
     Image {
@@ -83,27 +83,28 @@ ApplicationWindow {
         anchors.bottom: searchButton.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: 10
-        anchors.topMargin: 15
+        anchors.topMargin: 10
+        anchors.bottomMargin: 10
 
-        readonly property real cellWidth: width / 4
-        readonly property real cellHeight: height / 4
+        readonly property real iconSize: 95
+        readonly property real colSpacing: (width - (4 * iconSize)) / 5
 
         Repeater {
             model: mainboardManager.gridItems
 
             delegate: Item {
-                x: modelData.col * gridContainer.cellWidth
-                y: modelData.row * gridContainer.cellHeight
-                width: modelData.spanX * gridContainer.cellWidth
-                height: modelData.spanY * gridContainer.cellHeight
+                x: gridContainer.colSpacing + modelData.col * (gridContainer.iconSize + gridContainer.colSpacing)
+                y: modelData.row * (gridContainer.iconSize + 25) + 10
+                width: modelData.spanX * gridContainer.iconSize + (modelData.spanX - 1) * gridContainer.colSpacing
+                height: modelData.spanY * gridContainer.iconSize + (modelData.spanY - 1) * 25
 
                 Item {
                     anchors.fill: parent
                     visible: modelData.type === "app"
 
                     Column {
-                        anchors.centerIn: parent
+                        anchors.top: parent.top
+                        anchors.horizontalCenter: parent.horizontalCenter
                         spacing: 4
 
                         Image {
@@ -125,36 +126,35 @@ ApplicationWindow {
                             font.bold: true
                             anchors.horizontalCenter: parent.horizontalCenter
                             elide: Text.ElideRight
-                            width: gridContainer.cellWidth - 8
+                            width: 95
                             horizontalAlignment: Text.AlignHCenter
                         }
                     }
                 }
 
-                Rectangle {
+                Item {
                     anchors.fill: parent
-                    anchors.margins: 6
                     visible: modelData.type === "widget"
-                    color: "#40d3e2ff"
-                    radius: 23.75
 
                     Column {
-                        anchors.centerIn: parent
-                        visible: modelData.id === "clock_widget"
+                        anchors.fill: parent
+                        spacing: 4
 
-                        Text {
-                            text: Qt.formatTime(new Date(), "hh:mm")
-                            color: "white"
-                            font.pixelSize: 36
-                            font.bold: true
-                            anchors.horizontalCenter: parent.horizontalCenter
+                        Loader {
+                            width: parent.width
+                            height: parent.height - 18
+                            source: modelData.widgetSource
                         }
 
                         Text {
-                            text: modelData.name
-                            color: "#dddddd"
-                            font.pixelSize: 13
+                            text: modelData.appName
+                            color: "white"
+                            font.pixelSize: 12
+                            font.bold: true
                             anchors.horizontalCenter: parent.horizontalCenter
+                            elide: Text.ElideRight
+                            width: parent.width
+                            horizontalAlignment: Text.AlignHCenter
                         }
                     }
                 }
@@ -182,6 +182,7 @@ ApplicationWindow {
         }
     }
 
+
     Rectangle {
         id: dock
         width: parent.width - 20
@@ -196,7 +197,7 @@ ApplicationWindow {
         Row {
             id: dockRow
             anchors.centerIn: parent
-            spacing: 15
+            spacing: (gridContainer.width - (4 * gridContainer.iconSize)) / 5
 
             Repeater {
                 model: mainboardManager.dockItems
@@ -206,7 +207,6 @@ ApplicationWindow {
                     height: 95
                     source: modelData.icon
                     fillMode: Image.PreserveAspectFit
-                    
 
                     MouseArea {
                         anchors.fill: parent

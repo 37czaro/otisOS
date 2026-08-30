@@ -21,15 +21,23 @@ class mainboardManager(QObject):
         items = []
         for item in raw_list:
             icon_url = ""
+            widget_url = ""
+
             if "icon" in item:
                 abs_icon_path = os.path.join(ROOT_DIR, item["icon"])
                 icon_url = QUrl.fromLocalFile(abs_icon_path).toString()
-            
+
+            if "source" in item:
+                abs_widget_path = os.path.join(ROOT_DIR, item["source"])
+                widget_url = QUrl.fromLocalFile(abs_widget_path).toString()
+
             items.append({
                 "type": item.get("type", "app"),
                 "id": item.get("id", ""),
                 "name": item.get("name", ""),
+                "appName": item.get("appName", item.get("name", "")),
                 "icon": icon_url,
+                "widgetSource": widget_url,
                 "row": item.get("row", 0),
                 "col": item.get("col", 0),
                 "spanX": item.get("spanX", 1),

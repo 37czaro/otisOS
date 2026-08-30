@@ -4,7 +4,7 @@
       "type": "app",
       "id": "com.otis.messages.app",
       "name": "Wiadomości",
-      "icon": "users/user/apps/com.otis.messages.app/appicon/1x/default.png",
+      "icon": "users/user/apps/com.otis.messages.app/appicon/2x/default.png",
       "row": 0,
       "col": 0,
       "spanX": 1,
@@ -14,7 +14,7 @@
       "type": "app",
       "id": "com.otis.settings.app",
       "name": "Ustawienia",
-      "icon": "users/user/apps/com.otis.settings.app/appicon/1x/default.png",
+      "icon": "users/user/apps/com.otis.settings.app/appicon/2x/default.png",
       "row": 0,
       "col": 1,
       "spanX": 1,
@@ -22,8 +22,10 @@
     },
     {
       "type": "widget",
-      "id": "clock_widget",
+      "id": "com.otis.clock.app.clock_widget",
       "name": "Zegar",
+      "appName": "Zegar",
+      "source": "users/user/apps/com.otis.clock.app/widgets/clock.qml",
       "row": 1,
       "col": 0,
       "spanX": 2,
@@ -34,12 +36,12 @@
     {
       "id": "com.otis.appstore.app",
       "name": "AppStore",
-      "icon": "users/user/apps/com.otis.appstore.app/appicon/1x/default.png"
+      "icon": "users/user/apps/com.otis.appstore.app/appicon/2x/default.png"
     },
     {
       "id": "com.otis.devtools.app",
       "name": "DevTools",
-      "icon": "users/user/apps/com.otis.devtools.app/appicon/1x/default.png"
+      "icon": "users/user/apps/com.otis.devtools.app/appicon/2x/default.png"
     }
   ]
 }
