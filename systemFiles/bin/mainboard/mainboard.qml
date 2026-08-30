@@ -60,11 +60,11 @@ ApplicationWindow{
 
             Image{
                 id: bluetoothIcon
-                source: mainboardManager.bluetooth_inactiveIcon
-                height: 14
+                source: mainboardManager.bluetoothInactiveIcon
+                height: 16
                 fillMode: Image.PreserveAspectFit
             }
-            
+
             Image{
                 id: wifiIcon
                 source: mainboardManager.wifi3Icon
