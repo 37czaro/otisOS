@@ -1,0 +1,9 @@
+{
+    "name": "appStore",
+    "display_name": "App Store",
+    "appID": "com.otis.appstore",
+    "appBinary": "Home/Apps/com.otis.appstore.app/bin/main.py",
+    "version": "1.0",
+    "description": "Aplikacja sklepu z aplikacjami",
+    "author": "Otis"
+}

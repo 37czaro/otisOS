@@ -1,0 +1,9 @@
+{
+    "name": "devtools",
+    "display_name": "Dev Tools",
+    "appID": "com.otis.devtools",
+    "appBinary": "Home/Apps/com.otis.devtools.app/bin/main.py",
+    "version": "1.0",
+    "description": "Aplikacja narzędzi programistycznych",
+    "author": "Otis"
+}
