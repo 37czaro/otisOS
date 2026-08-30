@@ -1,16 +1,16 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-function appClicked(appId) {
-    console.log("clicked:  " + appId)
-}
-
 ApplicationWindow {
     id: mainWindow
     width: 480
     height: 800
     visible: true
     title: "MainBoard"
+
+    function appClicked(appId) {
+        console.log("clicked:  " + appId)
+    }
 
     Image {
         id: wallpaper
